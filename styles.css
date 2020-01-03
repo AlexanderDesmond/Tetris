@@ -1,0 +1,28 @@
+body {
+  background-color: #101010;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#score {
+  font-size: 2rem;
+}
+
+#controls {
+  font-size: 1rem;
+  text-align: center;
+}
+
+#controls ul {
+  list-style-type: none;
+}
+
+canvas {
+  border: solid 0.1rem white;
+}
