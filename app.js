@@ -40,38 +40,38 @@ function createPiece(type) {
     ];
   } else if (type === "O") {
     return [
-      [1, 1],
-      [1, 1]
+      [2, 2],
+      [2, 2]
     ];
   } else if (type === "T") {
     return [
       [0, 0, 0],
-      [1, 1, 1],
-      [0, 1, 0]
+      [3, 3, 3],
+      [0, 3, 0]
     ];
   } else if (type === "J") {
     return [
       [0, 0, 0],
-      [1, 1, 1],
-      [0, 0, 1]
+      [4, 4, 4],
+      [0, 0, 4]
     ];
   } else if (type === "L") {
     return [
       [0, 0, 0],
-      [1, 1, 1],
-      [1, 0, 0]
+      [5, 5, 5],
+      [5, 0, 0]
     ];
   } else if (type === "S") {
     return [
       [0, 0, 0],
-      [0, 1, 1],
-      [1, 1, 0]
+      [0, 6, 6],
+      [6, 6, 0]
     ];
   } else if (type === "Z") {
     return [
       [0, 0, 0],
-      [1, 1, 0],
-      [0, 1, 1]
+      [7, 7, 0],
+      [0, 7, 7]
     ];
   }
 }
@@ -89,7 +89,7 @@ function drawMatrix(matrix, offset) {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
-        CONTEXT.fillStyle = "red";
+        CONTEXT.fillStyle = colours[value];
         CONTEXT.fillRect(x + offset.x, y + offset.y, 1, 1);
       }
     });
@@ -197,13 +197,24 @@ function update(time = 0) {
   requestAnimationFrame(update);
 }
 
+const colours = [
+  null,
+  "blue",
+  "red",
+  "purple",
+  "green",
+  "yellow",
+  "orange",
+  "aqua"
+];
+
 // Creates the game board.
 const arena = createMatrix(24, 40);
 
 // Holds the position and shape of the current piece.
 const player = {
-  position: { x: 5, y: 5 },
-  matrix: createPiece("T")
+  position: { x: 0, y: 0 },
+  matrix: null
 };
 
 // Handles arrow keys for piece placement.
@@ -221,4 +232,5 @@ document.addEventListener("keydown", event => {
   }
 });
 
+playerReset();
 update();
