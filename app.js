@@ -90,6 +90,26 @@ function playerMove(direction) {
   }
 }
 
+// Rotate the current piece.
+function playerRotate(direction) {
+  rotate(player.matrix, direction);
+}
+
+// Handle rotation of a piece.
+function rotate(matrix, direction) {
+  for (let y = 0; y < matrix.length; y++) {
+    for (let x = 0; x < y; x++) {
+      [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+    }
+  }
+
+  if (direction > 0) {
+    matrix.forEach(row => row.reverse());
+  } else {
+    matrix.reverse();
+  }
+}
+
 let dropCounter = 0;
 let dropInterval = 1000;
 let lastTime = 0;
@@ -118,12 +138,16 @@ const player = {
 
 // Handles arrow keys for piece placement.
 document.addEventListener("keydown", event => {
-  if (event.keyCode === 37) {
+  if (event.keyCode === 37 || event.keyCode === 65) {
     playerMove(-1); // Move piece to the left
-  } else if (event.keyCode === 39) {
+  } else if (event.keyCode === 39 || event.keyCode === 68) {
     playerMove(1); // Move piece to the right;
-  } else if (event.keyCode === 40) {
+  } else if (event.keyCode === 40 || event.keyCode === 83) {
     playerDrop(); // Move piece down.
+  } else if (event.keyCode === 81) {
+    playerRotate(-1); // Rotate counter-clockwise.
+  } else if (event.keyCode === 69) {
+    playerRotate(1); // Rotate clockwise.
   }
 });
 
