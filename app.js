@@ -92,7 +92,21 @@ function playerMove(direction) {
 
 // Rotate the current piece.
 function playerRotate(direction) {
+  const position = player.position.x;
+  let offset = 1;
   rotate(player.matrix, direction);
+
+  // Prevent piece from rotating past the game board.
+  while (collide(arena, player)) {
+    player.position.x += offset;
+    offset = -(offset + (offset > 0 ? 1 : -1));
+
+    if (offset > player.matrix[0].length) {
+      rotate(player.matrix, -direction);
+      player.position.x = position;
+      return;
+    }
+  }
 }
 
 // Handle rotation of a piece.
