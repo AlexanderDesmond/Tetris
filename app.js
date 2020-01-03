@@ -5,16 +5,10 @@ CANVAS.width = 480;
 CANVAS.height = 800;
 CONTEXT.scale(20, 20);
 
-const matrix = [
-  [0, 0, 0],
-  [1, 1, 1],
-  [0, 1, 0]
-];
-
 // Handle collision.
 function collide(arena, player) {
   const [m, o] = [player.matrix, player.position];
-  for (let y = 0; y < matrix.length; y++) {
+  for (let y = 0; y < m.length; y++) {
     for (let x = 0; x < m[y].length; x++) {
       if (m[y][x] !== 0 && (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0)
         return true;
@@ -33,6 +27,52 @@ function createMatrix(width, height) {
   }
 
   return matrix;
+}
+
+function createPiece(type) {
+  if (type === "I") {
+    return [
+      [0, 0, 0, 0],
+      [1, 1, 1, 1],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+    ];
+  } else if (type === "O") {
+    return [
+      [1, 1],
+      [1, 1]
+    ];
+  } else if (type === "T") {
+    return [
+      [0, 0, 0],
+      [1, 1, 1],
+      [0, 1, 0]
+    ];
+  } else if (type === "J") {
+    return [
+      [0, 0, 0],
+      [1, 1, 1],
+      [0, 0, 1]
+    ];
+  } else if (type === "L") {
+    return [
+      [0, 0, 0],
+      [1, 1, 1],
+      [1, 0, 0]
+    ];
+  } else if (type === "S") {
+    return [
+      [0, 0, 0],
+      [0, 1, 1],
+      [1, 1, 0]
+    ];
+  } else if (type === "Z") {
+    return [
+      [0, 0, 0],
+      [1, 1, 0],
+      [0, 1, 1]
+    ];
+  }
 }
 
 function draw() {
@@ -75,6 +115,7 @@ function playerDrop() {
   if (collide(arena, player)) {
     player.position.y--;
     merge(arena, player);
+    playerReset();
     player.position.y = 0;
   }
   dropCounter = 0;
@@ -88,6 +129,14 @@ function playerMove(direction) {
   if (collide(arena, player)) {
     player.position.x -= direction;
   }
+}
+
+function playerReset() {
+  const pieces = "IOTJLSZ";
+  player.matrix = createPiece(pieces[(pieces.length * Math.random()) | 0]);
+  player.position.y = 0;
+  player.position.x =
+    ((arena[0].length / 2) | 0) - ((player.matrix[0].length / 2) | 0);
 }
 
 // Rotate the current piece.
@@ -147,7 +196,7 @@ const arena = createMatrix(24, 40);
 // Holds the position and shape of the current piece.
 const player = {
   position: { x: 5, y: 5 },
-  matrix: matrix
+  matrix: createPiece("T")
 };
 
 // Handles arrow keys for piece placement.
