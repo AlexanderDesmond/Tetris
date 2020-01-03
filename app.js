@@ -29,6 +29,7 @@ function createMatrix(width, height) {
   return matrix;
 }
 
+// Create a new tetronimo (Tetis piece).
 function createPiece(type) {
   if (type === "I") {
     return [
@@ -131,12 +132,18 @@ function playerMove(direction) {
   }
 }
 
+// Select the next piece.
 function playerReset() {
   const pieces = "IOTJLSZ";
   player.matrix = createPiece(pieces[(pieces.length * Math.random()) | 0]);
   player.position.y = 0;
   player.position.x =
     ((arena[0].length / 2) | 0) - ((player.matrix[0].length / 2) | 0);
+
+  // Game over when a piece reaches the top of the arena.
+  if (collide(arena, player)) {
+    arena.forEach(row => row.fill(0));
+  }
 }
 
 // Rotate the current piece.
