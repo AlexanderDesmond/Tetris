@@ -5,6 +5,25 @@ CANVAS.width = 480;
 CANVAS.height = 800;
 CONTEXT.scale(20, 20);
 
+function arenaSweep() {
+  let rowCount = 1;
+  outer: for (let y = arena.length - 1; y > 0; --y) {
+    for (let x = 0; x < arena[y].length; ++x) {
+      if (arena[y][x] === 0) {
+        continue outer;
+      }
+    }
+
+    const row = arena.splice(y, 1)[0].fill(0);
+    arena.unshift(row);
+    ++y;
+
+    // Adjust score.
+    player.score += rowCount * 10;
+    rowCount *= 2;
+  }
+}
+
 // Handle collision.
 function collide(arena, player) {
   const [m, o] = [player.matrix, player.position];
@@ -117,7 +136,8 @@ function playerDrop() {
     player.position.y--;
     merge(arena, player);
     playerReset();
-    player.position.y = 0;
+    arenaSweep();
+    updateScore();
   }
   dropCounter = 0;
 }
@@ -143,6 +163,8 @@ function playerReset() {
   // Game over when a piece reaches the top of the arena.
   if (collide(arena, player)) {
     arena.forEach(row => row.fill(0));
+    player.score = 0;
+    updateScore();
   }
 }
 
@@ -197,6 +219,10 @@ function update(time = 0) {
   requestAnimationFrame(update);
 }
 
+function updateScore() {
+  document.getElementById("score").innerText = player.score;
+}
+
 const colours = [
   null,
   "blue",
@@ -214,7 +240,8 @@ const arena = createMatrix(24, 40);
 // Holds the position and shape of the current piece.
 const player = {
   position: { x: 0, y: 0 },
-  matrix: null
+  matrix: null,
+  score: 0
 };
 
 // Handles arrow keys for piece placement.
@@ -233,4 +260,5 @@ document.addEventListener("keydown", event => {
 });
 
 playerReset();
+updateScore();
 update();
