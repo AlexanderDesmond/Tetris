@@ -1,2 +1,3 @@
 # Tetris
-A simple Tetris clone
+
+A simple Tetris clone in TypeScript.

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "system",
+    "target": "ESNext",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "rootDir": "src",
+    "outDir": "build",
+    "sourceMap": true
+  }
+}
